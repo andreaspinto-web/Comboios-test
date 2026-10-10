@@ -11,25 +11,35 @@
 .trip .price{color:var(--light);font-size:15px}.trip .price:not(.has-price){color:var(--muted);font-size:11px;font-weight:500}
 .filter-caption{font-size:11px;color:var(--muted);margin:8px 4px 4px}.filter-caption b{color:var(--light)}
 .trip-kind{display:flex;align-items:center;gap:5px;margin-bottom:9px;font-size:11px;color:var(--muted)}.service-tag{display:inline-block;border-radius:7px;padding:3px 7px;background:#275d38;color:#d8f5e1;font-size:12px;font-weight:750;margin-right:7px}
+.price-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:2px;white-space:nowrap}.price-wrap small{font-size:10px;font-weight:400;color:var(--muted)}.price-wrap .price{font-weight:750;font-variant-numeric:tabular-nums}.price-wrap .price.has-price{font-size:18px}
 .footer a{color:var(--light)}.footer{margin-top:22px}
 </style></head><body><main><header><b>↗ Comboios</b><span class="tag">Protótipo · CP</span></header>
 <section class="panel"><div class="station"><label for="from">Estação de partida</label><select id="from"></select></div><button class="swap" id="swap" aria-label="Trocar estações">⇅</button><div class="station"><label for="to">Estação de chegada</label><select id="to"></select></div></section>
 <section class="panel"><div class="timeline"><div><label for="clock">Partir a partir das</label><div class="time" id="clockText">12:00</div></div><span class="muted">Arrasta para explorar →</span></div><input id="clock" aria-label="Hora de partida" type="range" min="0" max="1435" step="5" value="720"><div class="ticks"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:55</span></div></section>
-<div class="filter-caption"><b>Urbanos (U)</b> · Regionais (R) em preparação · partidas na próxima hora</div><div class="results"><strong>Próximas partidas</strong><span id="count" class="muted"></span></div><div id="trips"></div><p class="footer">ⓘ Beta: horários históricos para sábados, domingos e feriados, sujeitos a validação. Os preços só são apresentados quando temos referência tarifária para o percurso. <a target="_blank" rel="noopener" href="https://www.cp.pt/info/documents/d/cp/completo-comboios-urbanos-lisboa">Horários CP ↗</a> · <a target="_blank" rel="noopener" href="https://www.cp.pt/info/documents/d/cp/precos-comboios-urbanos-lisboa">Tarifário CP ↗</a></p></main>
+<div class="filter-caption"><b>Urbanos (U)</b> · Regionais (R) em preparação · partidas na próxima hora</div><div class="results"><strong>Próximas partidas</strong><span id="count" class="muted"></span></div><div id="trips"></div><p class="footer">ⓘ Beta: horários históricos para sábados, domingos e feriados, sujeitos a validação. Os preços U são calculados com o mapa de zonas e o tarifário CP 2026. Valores ainda não validados nas consultas individuais aparecem identificados como estimativa. Regionais e outros serviços ainda não estão incluídos. <a target="_blank" rel="noopener" href="https://www.cp.pt/info/documents/d/cp/completo-comboios-urbanos-lisboa">Horários CP ↗</a> · <a target="_blank" rel="noopener" href="https://www.cp.pt/info/documents/d/cp/precos-comboios-urbanos-lisboa">Tarifário CP ↗</a></p></main>
 <script>
 const $=id=>document.getElementById(id);
 const fmt=n=>String(Math.floor((n%1440)/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
 const durationText=n=>n>=60?Math.floor(n/60)+"h"+(n%60?" "+String(n%60).padStart(2,"0")+"min":""):n+" min";
 const min=t=>{const [h,m]=t.split(':').map(Number);return h*60+m};
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let services=[],fareReferences=[];
+let services=[],fareReferences=[],urbanZonePrices=[];
 const prefsKey='comboios-beta-preferencias-v1';
 function savePreferences(){try{localStorage.setItem(prefsKey,JSON.stringify({from:$('from').value,to:$('to').value,clock:$('clock').value}))}catch(e){}}
 function loadPreferences(){try{return JSON.parse(localStorage.getItem(prefsKey)||'{}')}catch(e){return {}}}
 function urbanFare(from,to){
- const pair=fareReferences.find(p=>p.origem===from&&p.destino===to&&p.tipo_servico==='U');
- return pair?Number(pair.preco_eur).toLocaleString('pt-PT',{style:'currency',currency:'EUR'}):null;
+ const exact=fareReferences.find(p=>p.tipo_servico==='U'&&((p.origem===from&&p.destino===to)||(p.origem===to&&p.destino===from)));
+ if(exact)return {amount:Number(exact.preco_eur),zones:exact.zonas,verified:exact.estado==='confirmado_captura_cp'};
+ const pair=urbanZonePrices.find(p=>(p.origem===from&&p.destino===to)||(p.origem===to&&p.destino===from));
+ if(pair)return {amount:Number(pair.valor_eur),zones:pair.zonas,verified:false};
+ return null;
 }
+function priceHTML(fare){
+ if(!fare)return '<span class="price-wrap"><span class="price">Preço por confirmar</span></span>';
+ const price=fare.amount.toLocaleString('pt-PT',{style:'currency',currency:'EUR'});
+ return '<span class="price-wrap"><strong class="price has-price">'+price+'</strong><small>'+(fare.verified?'Referência CP':'Estimativa por zonas')+'</small></span>';
+}
+
 function splitServices(v){
   const segments=[];let seg=[];
   for(const stop of v.st){
@@ -95,7 +105,7 @@ function render(){
     const el=document.createElement('article');el.className='trip';
     const duration=s.end-s.start;
     const fare=urbanFare(from,to);
-    el.innerHTML='<div class="trip-kind"><span class="service-tag">U</span><span>Urbano</span></div><div class="trip-top"><span class="hours">'+fmt(s.start)+'</span><span class="duration">'+durationText(duration)+'</span><span class="hours arrival">'+fmt(s.end)+'</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span>'+(s.changes?'1 transbordo':'Direto')+'</span><span class="price '+(fare?'has-price':'')+'">'+(fare?fare:'Preço por confirmar')+'</span></div>';
+    el.innerHTML='<div class="trip-kind"><span class="service-tag">U</span><span>Urbano</span></div><div class="trip-top"><span class="hours">'+fmt(s.start)+'</span><span class="duration">'+durationText(duration)+'</span><span class="hours arrival">'+fmt(s.end)+'</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span>'+(s.changes?'1 transbordo':'Direto')+'</span>'+priceHTML(fare)+'</div>';
     const btn=document.createElement('button');btn.className='view';btn.textContent='Ver percurso e horários ▾';btn.setAttribute('aria-expanded','false');
     const detail=document.createElement('div');detail.className='details';detail.hidden=true;
     const rows=s.changes?[
@@ -126,6 +136,6 @@ fetch('./horarios.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return 
   optionList(names,$('from'),saved.from||'Massamá - Barcarena');
   optionList(names,$('to'),saved.to||'Carregado');
   if(saved.clock!==undefined && Number.isFinite(+saved.clock))$('clock').value=saved.clock;
-  return fetch('./tarifarios-cp-2026.json').then(r=>{if(!r.ok)throw Error('tariffs HTTP '+r.status);return r.json()}).then(f=>{fareReferences=f.referencias_tarifa_urbana||[]}).catch(err=>{console.warn('Tarifas indisponíveis:',err)}).then(()=>render());
+  return fetch('./tarifarios-cp-2026.json').then(r=>{if(!r.ok)throw Error('tariffs HTTP '+r.status);return r.json()}).then(f=>{fareReferences=f.referencias_tarifa_urbana||[];urbanZonePrices=f.matriz_urbana_beta?.pares||[]}).catch(err=>{console.warn('Tarifas indisponíveis:',err)}).then(()=>render());
 }).catch(e=>{$('trips').innerHTML='<div class="empty">Não foi possível carregar os horários. Atualiza a página e tenta novamente.</div>';console.error(e)});
 </script></body></html>
