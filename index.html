@@ -10,7 +10,7 @@
 .stop.change{border-left-color:var(--warn);color:#f2caad}
 .trip .price{color:var(--light);font-size:15px}.trip .price:not(.has-price){color:var(--muted);font-size:11px;font-weight:500}
 .filter-caption{font-size:11px;color:var(--muted);margin:8px 4px 4px}.filter-caption b{color:var(--light)}
-.service-tag{display:inline-block;border-radius:7px;padding:3px 7px;background:#275d38;color:#d8f5e1;font-size:12px;font-weight:750;margin-right:7px}
+.trip-kind{display:flex;align-items:center;gap:5px;margin-bottom:9px;font-size:11px;color:var(--muted)}.service-tag{display:inline-block;border-radius:7px;padding:3px 7px;background:#275d38;color:#d8f5e1;font-size:12px;font-weight:750;margin-right:7px}
 .footer a{color:var(--light)}.footer{margin-top:22px}
 </style></head><body><main><header><b>↗ Comboios</b><span class="tag">Protótipo · CP</span></header>
 <section class="panel"><div class="station"><label for="from">Estação de partida</label><select id="from"></select></div><button class="swap" id="swap" aria-label="Trocar estações">⇅</button><div class="station"><label for="to">Estação de chegada</label><select id="to"></select></div></section>
@@ -95,7 +95,7 @@ function render(){
     const el=document.createElement('article');el.className='trip';
     const duration=s.end-s.start;
     const fare=urbanFare(from,to);
-    el.innerHTML='<div class="trip-top"><span class="hours">'+fmt(s.start)+'</span><span class="duration">'+durationText(duration)+'</span><span class="hours arrival">'+fmt(s.end)+'</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span><span class="service-tag">U</span>'+(s.changes?'1 transbordo':'Direto')+'</span><span class="price '+(fare?'has-price':'')+'">'+(fare?fare:'Preço por confirmar')+'</span></div>';
+    el.innerHTML='<div class="trip-kind"><span class="service-tag">U</span><span>Urbano</span></div><div class="trip-top"><span class="hours">'+fmt(s.start)+'</span><span class="duration">'+durationText(duration)+'</span><span class="hours arrival">'+fmt(s.end)+'</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span>'+(s.changes?'1 transbordo':'Direto')+'</span><span class="price '+(fare?'has-price':'')+'">'+(fare?fare:'Preço por confirmar')+'</span></div>';
     const btn=document.createElement('button');btn.className='view';btn.textContent='Ver percurso e horários ▾';btn.setAttribute('aria-expanded','false');
     const detail=document.createElement('div');detail.className='details';detail.hidden=true;
     const rows=s.changes?[
