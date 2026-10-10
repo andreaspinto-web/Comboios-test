@@ -5,11 +5,11 @@
 </style></head><body><main><header><b>↗ Comboios</b><span class="tag">Protótipo · CP</span></header>
 <section class="panel"><div class="station"><label for="from">Estação de partida</label><select id="from"></select></div><button class="swap" id="swap" aria-label="Trocar estações">⇅</button><div class="station"><label for="to">Estação de chegada</label><select id="to"></select></div></section>
 <section class="panel"><div class="timeline"><div><label for="clock">Partir a partir das</label><div class="time" id="clockText">12:00</div></div><span class="muted">Arrasta para explorar →</span></div><input id="clock" aria-label="Hora de partida" type="range" min="0" max="1435" step="5" value="720"><div class="ticks"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:55</span></div></section>
-<div class="warning"><b>⚠ Horários históricos</b><div>203 registos extraídos do PDF CP de 30/06/2024, apenas sábados, domingos e feriados. Extração ainda não totalmente validada; confirma sempre antes de viajar. Sem preços no documento.</div></div>
-<div class="results"><strong>Percursos disponíveis</strong><span id="count" class="muted"></span></div><div id="trips"></div><p class="footer">Dados extraídos automaticamente do PDF histórico da CP. Algumas correspondências exigem validação manual. Não usar para planear viagens sem confirmação. Para viajar, confirma sempre os horários e tarifas em <a href="https://www.cp.pt" style="color:var(--light)">cp.pt</a>.</p></main>
+<div class="results"><strong>Percursos disponíveis</strong><span id="count" class="muted"></span></div><div id="trips"></div><p class="footer"><strong>ⓘ Horários históricos · CP 2024 · fins de semana e feriados.</strong> Dados extraídos automaticamente, ainda sujeitos a validação. Dados extraídos automaticamente do PDF histórico da CP. Algumas correspondências exigem validação manual. Não usar para planear viagens sem confirmação. Para viajar, confirma sempre os horários e tarifas em <a href="https://www.cp.pt" style="color:var(--light)">cp.pt</a>.</p></main>
 <script>
 const $=id=>document.getElementById(id);
 const fmt=n=>String(Math.floor((n%1440)/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
+const durationText=n=>n>=60?Math.floor(n/60)+"h"+(n%60?" "+String(n%60).padStart(2,"0")+"min":""):n+" min";
 const min=t=>{const [h,m]=t.split(':').map(Number);return h*60+m};
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let services=[];
@@ -57,7 +57,7 @@ function connections(from,to,after){
         if(k<0||b<=k)continue;
         const departure=second.stops[k][1],end=second.stops[b][1];
         if(departure-arrival<5||departure-arrival>45||end-first.stops[a][1]>240)continue;
-        results.push({stops:[...first.stops.slice(a,j+1),...second.stops.slice(k+1,b+1)],start:first.stops[a][1],end,changes:1,transfer,source:first.source+' + '+second.source});
+        results.push({stops:[...first.stops.slice(a,j+1),...second.stops.slice(k+1,b+1)],start:first.stops[a][1],end,changes:1,transfer,transferArrival:arrival,transferDeparture:departure,source:first.source+' + '+second.source});
       }
     }
   }
@@ -77,13 +77,19 @@ function render(){
   for(const s of matches.slice(0,40)){
     const el=document.createElement('article');el.className='trip';
     const duration=s.end-s.start;
-    el.innerHTML='<div class="trip-top"><span class="hours">'+fmt(s.start)+' → '+fmt(s.end)+'</span><span class="muted">'+duration+' min</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span>'+(s.changes?s.changes+' transbordo · '+escapeHTML(s.transfer):'Direto')+'</span><span class="price">Preço indisponível</span></div>';
+    el.innerHTML='<div class="trip-top"><span class="hours">'+fmt(s.start)+' → '+fmt(s.end)+'</span><span class="muted">'+durationText(duration)+'</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span>'+(s.changes?s.changes+' transbordo · '+escapeHTML(s.transfer):'Direto')+'</span><span class="price">Tarifa por confirmar</span></div>';
     const btn=document.createElement('button');btn.className='view';btn.textContent='Ver percurso e horários ▾';btn.setAttribute('aria-expanded','false');
     const detail=document.createElement('div');detail.className='details';detail.hidden=true;
-    for(const [name,time] of s.stops){
+    const rows=s.changes?[
+      [from+' → '+s.transfer,fmt(s.start)+' – '+fmt(s.transferArrival)],
+      ['Transbordo em '+s.transfer,fmt(s.transferArrival)+' → '+fmt(s.transferDeparture)],
+      [s.transfer+' → '+to,fmt(s.transferDeparture)+' – '+fmt(s.end)]
+    ]:[[from+' → '+to,fmt(s.start)+' – '+fmt(s.end)]];
+    for(const [name,time] of rows){
       const stop=document.createElement('div');stop.className='stop';
-      const n=document.createElement('span');n.textContent=name+(s.changes&&name===s.transfer?' · mudar de comboio':'');
-      const t=document.createElement('strong');t.textContent=fmt(time);stop.append(n,t);detail.append(stop);
+      const n=document.createElement('span');n.textContent=name;
+      const t=document.createElement('strong');t.textContent=time;
+      stop.append(n,t);detail.append(stop);
     }
     const note=document.createElement('p');note.className='muted';note.textContent=s.source+' · dados históricos extraídos automaticamente; percurso sujeito a validação';detail.append(note);
     btn.onclick=()=>{detail.hidden=!detail.hidden;btn.setAttribute('aria-expanded',String(!detail.hidden));btn.textContent=detail.hidden?'Ver percurso e horários ▾':'Ocultar percurso ▴'};
