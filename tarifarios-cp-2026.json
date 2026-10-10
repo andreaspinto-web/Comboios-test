@@ -1,0 +1,450 @@
+{
+  "esquema": "cp-tarifarios-urbanos-lisboa-v1",
+  "fonte": {
+    "entidade": "CP - Comboios de Portugal",
+    "titulo": "Preços - Comboios Urbanos de Lisboa",
+    "url": "https://www.cp.pt/info/documents/d/cp/precos-comboios-urbanos-lisboa",
+    "vigencia_inicio": "2026-01-01",
+    "moeda": "EUR",
+    "tipo": "PDF oficial",
+    "pagina": 1
+  },
+  "tabela_zonas": [
+    {
+      "zonas": 1,
+      "bilhete_simples_inteiro": 1.5,
+      "bilhete_simples_meio": 0.75,
+      "bilhete_simples_quarto": 0.4,
+      "bilhete_10_viagens_inteiro": 13.5
+    },
+    {
+      "zonas": 2,
+      "bilhete_simples_inteiro": 1.85,
+      "bilhete_simples_meio": 0.95,
+      "bilhete_simples_quarto": 0.45,
+      "bilhete_10_viagens_inteiro": 16.65
+    },
+    {
+      "zonas": 3,
+      "bilhete_simples_inteiro": 2.2,
+      "bilhete_simples_meio": 1.1,
+      "bilhete_simples_quarto": 0.55,
+      "bilhete_10_viagens_inteiro": 19.8
+    },
+    {
+      "zonas": 4,
+      "bilhete_simples_inteiro": 2.55,
+      "bilhete_simples_meio": 1.3,
+      "bilhete_simples_quarto": 0.65,
+      "bilhete_10_viagens_inteiro": 22.95
+    },
+    {
+      "zonas": 5,
+      "bilhete_simples_inteiro": 2.9,
+      "bilhete_simples_meio": 1.45,
+      "bilhete_simples_quarto": 0.75,
+      "bilhete_10_viagens_inteiro": 26.1
+    },
+    {
+      "zonas": 6,
+      "bilhete_simples_inteiro": 3.2,
+      "bilhete_simples_meio": 1.6,
+      "bilhete_simples_quarto": 0.8,
+      "bilhete_10_viagens_inteiro": 28.8
+    },
+    {
+      "zonas": 7,
+      "bilhete_simples_inteiro": 3.55,
+      "bilhete_simples_meio": 1.8,
+      "bilhete_simples_quarto": 0.9,
+      "bilhete_10_viagens_inteiro": 31.95
+    },
+    {
+      "zonas": 8,
+      "bilhete_simples_inteiro": 3.9,
+      "bilhete_simples_meio": 1.95,
+      "bilhete_simples_quarto": 1,
+      "bilhete_10_viagens_inteiro": 35.1
+    }
+  ],
+  "assinatura_cp_30_dias": [
+    {
+      "zonas": 1,
+      "normal": 30.45,
+      "jovem": 22.85
+    },
+    {
+      "zonas": 2,
+      "normal": 32.35,
+      "jovem": 24.25
+    }
+  ],
+  "outros_titulos_pdf": {
+    "bilhete_ida_volta_lisboa_cascais": 5.1,
+    "bilhete_ida_volta_lisboa_sintra": 5.1,
+    "bilhete_turistico_24h": 6.7,
+    "bilhete_turistico_72h": 14.4,
+    "train_and_bus_24h": 14,
+    "bilhete_diario_carris_metro_cp_24h": 11.4,
+    "zapping_cp": 2.05
+  },
+  "validade_apos_validacao": [
+    {
+      "zonas": "1-2",
+      "minutos": 90
+    },
+    {
+      "zonas": "3-5",
+      "minutos": 120
+    },
+    {
+      "zonas": "6-8",
+      "minutos": 150
+    },
+    {
+      "titulo": "excesso_de_percurso",
+      "minutos": 150
+    },
+    {
+      "titulo": "zapping",
+      "minutos": 120
+    }
+  ],
+  "regras": [
+    "O bilhete simples urbano é calculado pelo número de zonas atravessadas entre as estações de origem e destino.",
+    "Viagens entre estações consecutivas pagam uma zona, incluindo estações na fronteira de zonas.",
+    "A tabela não determina tarifas de Regionais, Intercidades ou Alfa Pendular.",
+    "O mapa gráfico de limites de zonas do PDF ainda requer digitalização e validação estação a estação."
+  ],
+  "exemplos_pdf": [
+    {
+      "origem": "Amadora",
+      "destino": "Roma-Areeiro",
+      "zonas": 2
+    },
+    {
+      "origem": "S. Pedro",
+      "destino": "Bobadela",
+      "zonas": 5
+    }
+  ],
+  "estado_zonas_estacoes": "pendente_de_digitalizacao_validacao_do_mapa",
+  "precos_observados_app_cp": {
+    "data": "2026-10-10",
+    "tarifa": "1 adulto, 2ª classe / Turista, tal como apresentado nas capturas",
+    "fonte": "Capturas de ecrã fornecidas pelo utilizador; não fazem parte do PDF tarifário",
+    "observacoes": [
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "12:52",
+        "chegada": "14:03",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "13:06",
+        "chegada": "15:03",
+        "servicos": [
+          "U",
+          "TC",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "13:52",
+        "chegada": "15:03",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "14:06",
+        "chegada": "16:03",
+        "servicos": [
+          "U",
+          "TC",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "14:36",
+        "chegada": "16:03",
+        "servicos": [
+          "U",
+          "TC",
+          "IC",
+          "U"
+        ],
+        "preco_eur": 17.6
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "14:52",
+        "chegada": "16:03",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "15:06",
+        "chegada": "17:03",
+        "servicos": [
+          "U",
+          "TC",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "15:52",
+        "chegada": "17:03",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "16:06",
+        "chegada": "18:03",
+        "servicos": [
+          "U",
+          "TC",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "16:36",
+        "chegada": "18:03",
+        "servicos": [
+          "U",
+          "TC",
+          "IC",
+          "U"
+        ],
+        "preco_eur": 17.6
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "16:52",
+        "chegada": "18:03",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "17:06",
+        "chegada": "19:03",
+        "servicos": [
+          "U",
+          "TC",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "17:52",
+        "chegada": "19:03",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "18:06",
+        "chegada": "20:03",
+        "servicos": [
+          "U",
+          "TC",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "18:36",
+        "chegada": "20:03",
+        "servicos": [
+          "U",
+          "TC",
+          "IC",
+          "U"
+        ],
+        "preco_eur": 17.6
+      },
+      {
+        "origem": "Massamá - Barcarena",
+        "destino": "Carregado",
+        "partida": "18:52",
+        "chegada": "20:03",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "13:15",
+        "chegada": "14:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "14:15",
+        "chegada": "15:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "15:15",
+        "chegada": "16:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "16:15",
+        "chegada": "17:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "17:15",
+        "chegada": "18:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "18:15",
+        "chegada": "19:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "19:15",
+        "chegada": "20:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "20:23",
+        "chegada": "21:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "21:15",
+        "chegada": "22:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "22:15",
+        "chegada": "23:37",
+        "servicos": [
+          "U",
+          "U"
+        ],
+        "preco_eur": 3.55
+      },
+      {
+        "origem": "Carregado",
+        "destino": "Massamá - Barcarena",
+        "partida": "23:15",
+        "chegada": "00:37",
+        "servicos": [
+          "U",
+          "R",
+          "U"
+        ],
+        "preco_eur": 6.95
+      }
+    ]
+  },
+  "estado": "Tabela oficial transcrita; itinerários observados e mapa de zonas ainda devem ser validados antes de calcular todas as combinações de estações."
+}
