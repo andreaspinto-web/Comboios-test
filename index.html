@@ -2,17 +2,34 @@
 <html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17251f"><title>Comboios · Percursos</title>
 <style>
 :root{color-scheme:dark;--bg:#17251f;--card:#303432;--main:#226c39;--light:#70bc83;--warn:#ed792d;--text:#f4f7f3;--muted:#b4bfb8}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:560px;margin:auto;padding:28px 18px 90px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}header b{font-size:25px;letter-spacing:-1px}.tag{font-size:11px;border:1px solid #56705f;border-radius:30px;padding:7px 10px;color:var(--light)}.panel{background:var(--card);padding:17px;border-radius:23px;margin:14px 0}.station{background:#25312a;border:1px solid #4b5b50;border-radius:17px;padding:12px 14px;margin:9px 0}label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}select{width:100%;background:transparent;color:white;border:0;font:600 17px -apple-system,BlinkMacSystemFont,sans-serif;outline:0}option{background:#25312a}.swap{border:0;border-radius:50%;background:var(--main);color:white;width:36px;height:36px;font-size:20px;margin:-3px 0 -3px calc(50% - 18px);position:relative;z-index:2}.timeline{display:flex;align-items:center;justify-content:space-between;gap:10px}.time{font-size:35px;font-weight:750;font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:var(--light);height:28px}.muted{color:var(--muted);font-size:12px}.ticks{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}.results{display:flex;justify-content:space-between;align-items:baseline;margin:25px 3px 12px}.results strong{font-size:19px}.trip{background:var(--card);border-radius:20px;padding:17px;margin:12px 0}.trip-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.hours{font-size:22px;font-weight:750;letter-spacing:-.6px;font-variant-numeric:tabular-nums}.route{font-size:12px;margin-top:8px;color:#e1e9e3}.meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;margin:11px 0}.price{color:white;font-weight:650}.view{width:100%;background:#244c32;color:#dff6e5;border:1px solid #477c56;border-radius:13px;padding:12px;font-weight:700;text-align:left;cursor:pointer}.details{padding:15px 3px 2px;font-size:13px;line-height:1.9}.stop{display:flex;justify-content:space-between;border-left:2px solid var(--light);padding-left:13px;margin-left:5px}.warning{background:#3b332d;border:1px solid #775038;border-radius:16px;padding:14px;color:#fff;font-size:12px;line-height:1.6}.warning b{color:#ffa564}.empty{padding:28px 12px;color:var(--muted);text-align:center}.footer{font-size:11px;color:var(--muted);line-height:1.6;margin-top:20px}
+.trip-top{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center}
+.trip-top .arrival{text-align:right}.trip-top .duration{font-size:12px;white-space:nowrap;color:var(--muted)}
+.hours{white-space:nowrap;font-size:clamp(19px,5.5vw,25px);font-variant-numeric:tabular-nums}
+.stop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 2px 9px 13px;line-height:1.4;min-width:0}
+.stop span{min-width:0;overflow-wrap:break-word}.stop strong{font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.stop.change{border-left-color:var(--warn);color:#f2caad}
+.trip .price{color:var(--light);font-size:15px}.trip .price:not(.has-price){color:var(--muted);font-size:11px;font-weight:500}
+.filter-caption{font-size:11px;color:var(--muted);margin:8px 4px 4px}.filter-caption b{color:var(--light)}
+.service-tag{display:inline-block;border-radius:7px;padding:3px 7px;background:#275d38;color:#d8f5e1;font-size:12px;font-weight:750;margin-right:7px}
+.footer a{color:var(--light)}.footer{margin-top:22px}
 </style></head><body><main><header><b>↗ Comboios</b><span class="tag">Protótipo · CP</span></header>
 <section class="panel"><div class="station"><label for="from">Estação de partida</label><select id="from"></select></div><button class="swap" id="swap" aria-label="Trocar estações">⇅</button><div class="station"><label for="to">Estação de chegada</label><select id="to"></select></div></section>
 <section class="panel"><div class="timeline"><div><label for="clock">Partir a partir das</label><div class="time" id="clockText">12:00</div></div><span class="muted">Arrasta para explorar →</span></div><input id="clock" aria-label="Hora de partida" type="range" min="0" max="1435" step="5" value="720"><div class="ticks"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:55</span></div></section>
-<div class="results"><strong>Percursos disponíveis</strong><span id="count" class="muted"></span></div><div id="trips"></div><p class="footer"><strong>ⓘ Horários históricos · CP 2024 · fins de semana e feriados.</strong> Dados extraídos automaticamente, ainda sujeitos a validação. Dados extraídos automaticamente do PDF histórico da CP. Algumas correspondências exigem validação manual. Não usar para planear viagens sem confirmação. Para viajar, confirma sempre os horários e tarifas em <a href="https://www.cp.pt" style="color:var(--light)">cp.pt</a>.</p></main>
+<div class="filter-caption"><b>Urbanos (U)</b> · Regionais (R) em preparação · partidas na próxima hora</div><div class="results"><strong>Próximas partidas</strong><span id="count" class="muted"></span></div><div id="trips"></div><p class="footer">ⓘ Beta: horários históricos para sábados, domingos e feriados, sujeitos a validação. Os preços só são apresentados quando temos referência tarifária para o percurso. <a target="_blank" rel="noopener" href="https://www.cp.pt/info/documents/d/cp/completo-comboios-urbanos-lisboa">Horários CP ↗</a> · <a target="_blank" rel="noopener" href="https://www.cp.pt/info/documents/d/cp/precos-comboios-urbanos-lisboa">Tarifário CP ↗</a></p></main>
 <script>
 const $=id=>document.getElementById(id);
 const fmt=n=>String(Math.floor((n%1440)/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
 const durationText=n=>n>=60?Math.floor(n/60)+"h"+(n%60?" "+String(n%60).padStart(2,"0")+"min":""):n+" min";
 const min=t=>{const [h,m]=t.split(':').map(Number);return h*60+m};
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let services=[];
+let services=[],fareReferences=[];
+const prefsKey='comboios-beta-preferencias-v1';
+function savePreferences(){try{localStorage.setItem(prefsKey,JSON.stringify({from:$('from').value,to:$('to').value,clock:$('clock').value}))}catch(e){}}
+function loadPreferences(){try{return JSON.parse(localStorage.getItem(prefsKey)||'{}')}catch(e){return {}}}
+function urbanFare(from,to){
+ const pair=fareReferences.find(p=>p.origem===from&&p.destino===to&&p.tipo_servico==='U');
+ return pair?Number(pair.preco_eur).toLocaleString('pt-PT',{style:'currency',currency:'EUR'}):null;
+}
 function splitServices(v){
   const segments=[];let seg=[];
   for(const stop of v.st){
@@ -25,7 +42,7 @@ function splitServices(v){
   return segments.map((st,i)=>{
     let offset=0,previous=-1;
     const stops=st.map(([name,time])=>{let t=min(time)+offset;if(previous>=0&&t<previous){offset+=1440;t+=1440}previous=t;return [name,t]});
-    return {id:v.id+'-'+i,stops,source:'PDF CP 2024 · pág. '+v.p};
+    return {id:v.id+'-'+i,stops,category:'U',source:'Comboios Urbanos de Lisboa'};
   });
 }
 function optionList(names,select,defaultValue){
@@ -38,7 +55,7 @@ function directLegs(from,to,after){
     const a=s.stops.findIndex(p=>p[0]===from),b=s.stops.findIndex((p,i)=>i>a&&p[0]===to);
     if(a>=0&&b>a){
       const stops=s.stops.slice(a,b+1),start=stops[0][1],end=stops.at(-1)[1];
-      if(start>=after&&start<1440&&end-start>0&&end-start<240)results.push({stops,start,end,changes:0,source:s.source});
+      if(start>=after&&start<after+60&&start<1440&&end-start>0&&end-start<240)results.push({stops,start,end,changes:0,source:s.source});
     }
   }
   return results;
@@ -47,7 +64,7 @@ function connections(from,to,after){
   const results=[];
   for(const first of services){
     const a=first.stops.findIndex(p=>p[0]===from);
-    if(a<0||first.stops[a][1]<after||first.stops[a][1]>=1440)continue;
+    if(a<0||first.stops[a][1]<after||first.stops[a][1]>=after+60||first.stops[a][1]>=1440)continue;
     for(let j=a+1;j<first.stops.length;j++){
       const [transfer,arrival]=first.stops[j];
       if(arrival-first.stops[a][1]>180)break;
@@ -71,38 +88,44 @@ function render(){
   const direct=directLegs(from,to,after);
   const indirect=connections(from,to,after);
   const seen=new Set();
-  const matches=[...direct,...indirect].filter(s=>{const key=s.start+'|'+s.end+'|'+s.changes+'|'+(s.transfer||'');if(seen.has(key))return false;seen.add(key);return true}).sort((a,b)=>a.start-b.start||a.end-b.end);
+  const matches=[...direct,...indirect].filter(s=>s.start<after+60).filter(s=>{const key=s.start+'|'+s.end+'|'+s.changes+'|'+(s.transfer||'');if(seen.has(key))return false;seen.add(key);return true}).sort((a,b)=>a.start-b.start||a.end-b.end);
   $('count').textContent=matches.length+' resultados';
   if(!matches.length){$('trips').innerHTML='<div class="empty">Sem percursos encontrados a partir desta hora nos dados extraídos. Experimenta outra hora ou estação.</div>';return}
-  for(const s of matches.slice(0,40)){
+  for(const s of matches.slice(0,10)){
     const el=document.createElement('article');el.className='trip';
     const duration=s.end-s.start;
-    el.innerHTML='<div class="trip-top"><span class="hours">'+fmt(s.start)+' → '+fmt(s.end)+'</span><span class="muted">'+durationText(duration)+'</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span>'+(s.changes?s.changes+' transbordo · '+escapeHTML(s.transfer):'Direto')+'</span><span class="price">Tarifa por confirmar</span></div>';
+    const fare=urbanFare(from,to);
+    el.innerHTML='<div class="trip-top"><span class="hours">'+fmt(s.start)+'</span><span class="duration">'+durationText(duration)+'</span><span class="hours arrival">'+fmt(s.end)+'</span></div><div class="route">'+escapeHTML(from)+' → '+escapeHTML(to)+'</div><div class="meta"><span><span class="service-tag">U</span>'+(s.changes?'1 transbordo':'Direto')+'</span><span class="price '+(fare?'has-price':'')+'">'+(fare?fare:'Preço por confirmar')+'</span></div>';
     const btn=document.createElement('button');btn.className='view';btn.textContent='Ver percurso e horários ▾';btn.setAttribute('aria-expanded','false');
     const detail=document.createElement('div');detail.className='details';detail.hidden=true;
     const rows=s.changes?[
-      [from+' → '+s.transfer,fmt(s.start)+' – '+fmt(s.transferArrival)],
-      ['Transbordo em '+s.transfer,fmt(s.transferArrival)+' → '+fmt(s.transferDeparture)],
-      [s.transfer+' → '+to,fmt(s.transferDeparture)+' – '+fmt(s.end)]
-    ]:[[from+' → '+to,fmt(s.start)+' – '+fmt(s.end)]];
-    for(const [name,time] of rows){
-      const stop=document.createElement('div');stop.className='stop';
-      const n=document.createElement('span');n.textContent=name;
-      const t=document.createElement('strong');t.textContent=time;
+      {name:from,time:fmt(s.start),change:false},
+      {name:'Transbordo · '+s.transfer,time:fmt(s.transferArrival)+' → '+fmt(s.transferDeparture),change:true},
+      {name:to,time:fmt(s.end),change:false}
+    ]:[
+      {name:from,time:fmt(s.start),change:false},
+      {name:to,time:fmt(s.end),change:false}
+    ];
+    for(const row of rows){
+      const stop=document.createElement('div');stop.className='stop'+(row.change?' change':'');
+      const n=document.createElement('span');n.textContent=row.name;
+      const t=document.createElement('strong');t.textContent=row.time;
       stop.append(n,t);detail.append(stop);
     }
-    const note=document.createElement('p');note.className='muted';note.textContent=s.source+' · dados históricos extraídos automaticamente; percurso sujeito a validação';detail.append(note);
     btn.onclick=()=>{detail.hidden=!detail.hidden;btn.setAttribute('aria-expanded',String(!detail.hidden));btn.textContent=detail.hidden?'Ver percurso e horários ▾':'Ocultar percurso ▴'};
     el.append(btn,detail);$('trips').append(el);
   }
-  if(matches.length>40){const d=document.createElement('div');d.className='empty';d.textContent='A mostrar os primeiros 40 resultados. Ajusta o slider para ver mais tarde.';$('trips').append(d)}
+  if(matches.length>10){const d=document.createElement('div');d.className='empty';d.textContent='A mostrar 10 partidas. Ajusta a hora para explorar outros horários.';$('trips').append(d)}
 }
-$('clock').addEventListener('input',render);$('from').addEventListener('change',render);$('to').addEventListener('change',render);
-$('swap').onclick=()=>{const a=$('from').value;$('from').value=$('to').value;$('to').value=a;render()};
+$('clock').addEventListener('input',()=>{savePreferences();render()});$('from').addEventListener('change',()=>{savePreferences();render()});$('to').addEventListener('change',()=>{savePreferences();render()});
+$('swap').onclick=()=>{const a=$('from').value;$('from').value=$('to').value;$('to').value=a;savePreferences();render()};
 fetch('./horarios.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(data=>{
   services=data.viagens.flatMap(splitServices);
   const names=[...new Set(data.viagens.flatMap(v=>v.st.map(p=>p[0])))].sort((a,b)=>a.localeCompare(b,'pt'));
-  optionList(names,$('from'),'Massamá - Barcarena');optionList(names,$('to'),'Carregado');
-  render();
+  const saved=loadPreferences();
+  optionList(names,$('from'),saved.from||'Massamá - Barcarena');
+  optionList(names,$('to'),saved.to||'Carregado');
+  if(saved.clock!==undefined && Number.isFinite(+saved.clock))$('clock').value=saved.clock;
+  return fetch('./tarifarios-cp-2026.json').then(r=>{if(!r.ok)throw Error('tariffs HTTP '+r.status);return r.json()}).then(f=>{fareReferences=f.referencias_tarifa_urbana||[]}).catch(err=>{console.warn('Tarifas indisponíveis:',err)}).then(()=>render());
 }).catch(e=>{$('trips').innerHTML='<div class="empty">Não foi possível carregar os horários. Atualiza a página e tenta novamente.</div>';console.error(e)});
 </script></body></html>
