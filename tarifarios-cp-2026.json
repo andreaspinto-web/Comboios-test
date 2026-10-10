@@ -446,5 +446,26 @@
       }
     ]
   },
-  "estado": "Tabela oficial transcrita; itinerários observados e mapa de zonas ainda devem ser validados antes de calcular todas as combinações de estações."
+  "estado": "Tabela oficial transcrita; itinerários observados e mapa de zonas ainda devem ser validados antes de calcular todas as combinações de estações.",
+  "referencias_tarifa_urbana": [
+    {
+      "origem": "Massamá - Barcarena",
+      "destino": "Carregado",
+      "tipo_servico": "U",
+      "zonas": 7,
+      "preco_eur": 3.55,
+      "fonte": "Consulta CP em 2026-10-10 fornecida em capturas pelo utilizador; preço urbano para o percurso, não para serviços IC/R/AP",
+      "estado": "observado"
+    },
+    {
+      "origem": "Carregado",
+      "destino": "Massamá - Barcarena",
+      "tipo_servico": "U",
+      "zonas": 7,
+      "preco_eur": 3.55,
+      "fonte": "Consulta CP em 2026-10-10 fornecida em capturas pelo utilizador; preço urbano para o percurso, não para serviços IC/R/AP",
+      "estado": "observado"
+    }
+  ],
+  "aviso_classificacao": "O ficheiro horarios.json atual contém horários extraídos de um PDF de Comboios Urbanos de Lisboa, sem campo de tipo de serviço por viagem. As tarifas de Regionais/InterRegionais não podem ser inferidas desta tabela."
 }
