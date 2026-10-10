@@ -114,7 +114,9 @@
     "O bilhete simples urbano é calculado pelo número de zonas atravessadas entre as estações de origem e destino.",
     "Viagens entre estações consecutivas pagam uma zona, incluindo estações na fronteira de zonas.",
     "A tabela não determina tarifas de Regionais, Intercidades ou Alfa Pendular.",
-    "O mapa gráfico de limites de zonas do PDF ainda requer digitalização e validação estação a estação."
+    "O mapa gráfico de limites de zonas do PDF ainda requer digitalização e validação estação a estação.",
+    "Cálculo experimental: contar zonas distintas atravessadas, e usar o número inteiro do tarifário 2026. Viagens entre estações consecutivas cobram sempre pelo menos e no máximo 1 zona.",
+    "Serviços R/IR/IC/AP/TC e transbordos com categorias mistas têm tarifários próprios que este JSON não calcula."
   ],
   "exemplos_pdf": [
     {
@@ -128,7 +130,7 @@
       "zonas": 5
     }
   ],
-  "estado_zonas_estacoes": "pendente_de_digitalizacao_validacao_do_mapa",
+  "estado_zonas_estacoes": "Interpretadas 35 estações do mapa CP em 8 grupos para cálculo experimental; carece de validação estação a estação; não substituir preços oficiais de viagens que usem serviços R, IC, AP, TC.",
   "precos_observados_app_cp": {
     "data": "2026-10-10",
     "tarifa": "1 adulto, 2ª classe / Turista, tal como apresentado nas capturas",
@@ -450,22 +452,224 @@
   "referencias_tarifa_urbana": [
     {
       "origem": "Massamá - Barcarena",
-      "destino": "Carregado",
+      "destino": "Vila Franca de Xira",
+      "zonas": 6,
+      "preco_eur": 3.2,
       "tipo_servico": "U",
-      "zonas": 7,
-      "preco_eur": 3.55,
-      "fonte": "Consulta CP em 2026-10-10 fornecida em capturas pelo utilizador; preço urbano para o percurso, não para serviços IC/R/AP",
-      "estado": "observado"
+      "estado": "calculado_por_zonas_beta",
+      "fonte": "Mapa oficial de zonas + preços CP 2026; conferir no motor de pesquisa CP",
+      "url_pesquisa": "https://www.cp.pt/pt/resultado-pesquisa?passageiros=1&selectedClass=2&startDate=2026-10-10&departureStation=94-60137&arrivalStation=94-31278"
     },
     {
-      "origem": "Carregado",
-      "destino": "Massamá - Barcarena",
+      "origem": "Massamá - Barcarena",
+      "destino": "Castanheira do Ribatejo",
+      "zonas": 6,
+      "preco_eur": 3.2,
       "tipo_servico": "U",
+      "estado": "calculado_por_zonas_beta",
+      "fonte": "Mapa oficial de zonas + preços CP 2026; conferir no motor de pesquisa CP",
+      "url_pesquisa": "https://www.cp.pt/pt/resultado-pesquisa?passageiros=1&selectedClass=2&startDate=2026-10-10&departureStation=94-60137&arrivalStation=94-31310"
+    },
+    {
+      "origem": "Massamá - Barcarena",
+      "destino": "Carregado",
       "zonas": 7,
       "preco_eur": 3.55,
-      "fonte": "Consulta CP em 2026-10-10 fornecida em capturas pelo utilizador; preço urbano para o percurso, não para serviços IC/R/AP",
-      "estado": "observado"
+      "tipo_servico": "U",
+      "estado": "confirmado_captura_cp",
+      "fonte": "Resultado CP de 10-10-2026 fornecido em capturas pelo utilizador",
+      "url_pesquisa": "https://www.cp.pt/pt/resultado-pesquisa?passageiros=1&selectedClass=2&startDate=2026-10-10&departureStation=94-60137&arrivalStation=94-31336"
     }
   ],
-  "aviso_classificacao": "O ficheiro horarios.json atual contém horários extraídos de um PDF de Comboios Urbanos de Lisboa, sem campo de tipo de serviço por viagem. As tarifas de Regionais/InterRegionais não podem ser inferidas desta tabela."
+  "aviso_classificacao": "O ficheiro horarios.json atual contém horários extraídos de um PDF de Comboios Urbanos de Lisboa, sem campo de tipo de serviço por viagem. As tarifas de Regionais/InterRegionais não podem ser inferidas desta tabela.",
+  "fonte_mapa_zonas": {
+    "titulo": "Mapa de Zonas e Municípios – Comboios Urbanos de Lisboa",
+    "url": "https://www.cp.pt/info/documents/d/cp/mapa-zonas-comboios-urbanos-lisboa",
+    "entidade": "CP",
+    "metodo": "interpretação do mapa gráfico; classificação de zonas a verificar estação a estação",
+    "estado": "interpretacao_beta_nao_auditada"
+  },
+  "estacoes_codigo_cp": {
+    "Massamá - Barcarena": "94-60137",
+    "Vila Franca de Xira": "94-31278",
+    "Castanheira do Ribatejo": "94-31310",
+    "Carregado": "94-31336"
+  },
+  "zonas_estacoes_beta": [
+    {
+      "estacao": "Sintra",
+      "zona": 1,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Portela",
+      "zona": 1,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Algueirão",
+      "zona": 1,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Mercês",
+      "zona": 1,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Rio de Mouro",
+      "zona": 2,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Cacém",
+      "zona": 2,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Mira Sintra - Meleças",
+      "zona": 2,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Massamá - Barcarena",
+      "zona": 2,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Monte Abraão",
+      "zona": 3,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Queluz - Belas",
+      "zona": 3,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Amadora",
+      "zona": 3,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Reboleira",
+      "zona": 3,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Sta. Cruz / Damaia",
+      "zona": 3,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Benfica",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Campolide",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Rossio",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Sete Rios",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Entrecampos",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Roma - Areeiro",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Oriente",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Braço de Prata",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Santa Apolónia",
+      "zona": 4,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Moscavide",
+      "zona": 5,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Sacavém",
+      "zona": 5,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Bobadela",
+      "zona": 5,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Santa Iria",
+      "zona": 6,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Póvoa",
+      "zona": 7,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Alverca",
+      "zona": 7,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Alhandra",
+      "zona": 7,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Vila Franca de Xira",
+      "zona": 7,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Castanheira do Ribatejo",
+      "zona": 7,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Carregado",
+      "zona": 8,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Vila Nova da Rainha",
+      "zona": 8,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Espadanal da Azambuja",
+      "zona": 8,
+      "estado": "por_validar_com_mapa_cp"
+    },
+    {
+      "estacao": "Azambuja",
+      "zona": 8,
+      "estado": "por_validar_com_mapa_cp"
+    }
+  ]
 }
